@@ -1,4 +1,4 @@
-package com.revature.project0;
+package com.revature.project1;
 
 public class Project1 {
     public static void main(String[] args) {

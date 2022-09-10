@@ -6,4 +6,4 @@ resources/
 *.class
 *.jar
 
-applicatios.properties
+application.properties

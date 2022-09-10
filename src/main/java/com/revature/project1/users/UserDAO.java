@@ -8,12 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 public class UserDAO {
 
-    private final String select = "select * from app_users";
-
     public List<User> getAllUsers() {
+        String select = "select * from app_users";
 
         List<User> allUsers = new ArrayList<>();
 

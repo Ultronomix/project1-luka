@@ -1,13 +1,20 @@
 package com.revature.project1;
 
-import com.revature.project1.users.UserDAO;
+import org.apache.catalina.LifecycleException;
+import org.apache.catalina.startup.Tomcat;
 
 public class Project1 {
-    public static void main(String[] args) {
-        System.out.println("Initial commit!");
+    public static void main(String[] args) throws LifecycleException {
+        String docBase = System.getProperty(("java.io.tmpdir"));
+        Tomcat webServer = new Tomcat();
+        webServer.setBaseDir(docBase);
+        webServer.setPort(5000);
+        webServer.getConnector();
 
+        webServer.addContext("", docBase);
 
-        UserDAO userDao = new UserDAO();
-        System.out.println(userDao.getAllUsers());
+        webServer.start();
+        webServer.getServer().await();
+        System.out.println("Web application successfully started.");
     }
 }

@@ -12,8 +12,8 @@ public class Project1 {
         webServer.setPort(8080);
         webServer.getConnector();
 
-        webServer.addContext("/project1", docBase);
-        webServer.addServlet("/project1", "UserServlet", new UserServlet()).addMapping("/users");
+        webServer.addContext("", docBase);
+        webServer.addServlet("", "UserServlet", new UserServlet()).addMapping("/users");
 
 
         webServer.start();

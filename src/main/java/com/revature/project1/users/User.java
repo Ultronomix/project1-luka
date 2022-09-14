@@ -4,18 +4,45 @@ import java.util.Objects;
 
 public class User {
 
-    private int id;
+    private String userId;
+    private String givenName;
+    private String surname;
+    private String email;
     private String username;
-    private int paycheck;
+    private String password;
+    private boolean isActive;
+    private Role role;
 
-
-
-    public int getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -26,22 +53,28 @@ public class User {
         this.username = username;
     }
 
-    public int getPaycheck() {
-        return paycheck;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPaycheck(int paycheck) {
-        this.paycheck = paycheck;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public User() {
-        super();
+    public boolean isActive() {
+        return isActive;
     }
 
-    public User(int id, String username, int paycheck) {
-        this.id = id;
-        this.username = username;
-        this.paycheck = paycheck;
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -49,20 +82,25 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && paycheck == user.paycheck && username.equals(user.username);
+        return isActive == user.isActive && userId.equals(user.userId) && givenName.equals(user.givenName) && surname.equals(user.surname) && email.equals(user.email) && username.equals(user.username) && password.equals(user.password) && role.equals(user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, paycheck);
+        return Objects.hash(userId, givenName, surname, email, username, password, isActive, role);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "userId='" + userId + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", paycheck=" + paycheck +
+                ", password='" + password + '\'' +
+                ", isActive=" + isActive +
+                ", role=" + role +
                 '}';
     }
 }

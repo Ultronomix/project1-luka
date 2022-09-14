@@ -8,13 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
-import java.util.*;
+
 
 public class UserDAO {
 
     public List<User> getAllUsers() {
-        String select = "select * from app_users";
+        String select = "select * from users";
 
         List<User> allUsers = new ArrayList<>();
 
@@ -37,9 +36,13 @@ public class UserDAO {
         List<User> users = new ArrayList<>();
         while (rs.next()) {
             User user = new User();
-            user.setId(rs.getInt("id"));
+            user.setUserId(rs.getString("user_id"));
             user.setUsername(rs.getString("username"));
-            user.setPaycheck(rs.getInt("paycheck"));
+            user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            user.setGivenName(rs.getString("given_name"));
+            user.setSurname(rs.getString("surname"));
+            user.setActive(rs.getBoolean("is_active"));
             users.add(user);
         }
         return users;

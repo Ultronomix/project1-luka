@@ -1,5 +1,7 @@
 package com.revature.project1.users;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +19,10 @@ public class UserServlet extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-       List<User> allUsers = userDAO.getAllUsers();
-
-        resp.getWriter().write(allUsers.toString());
+        ObjectMapper jsonMapper = new ObjectMapper();
+        resp.setContentType("application/json");
+        List<User> allUsers = userDAO.getAllUsers();
+        resp.getWriter().write(jsonMapper.writeValueAsString(allUsers));
 
 
     }

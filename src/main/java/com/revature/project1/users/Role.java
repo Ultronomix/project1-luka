@@ -7,6 +7,11 @@ public class Role {
     private String userId;
     private String name;
 
+    public Role(String userId,String role){
+        this.userId=userId;
+        this.name = role;
+    }
+
     public String getUserId() {
         return userId;
     }

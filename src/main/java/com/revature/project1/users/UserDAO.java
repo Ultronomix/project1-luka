@@ -15,8 +15,10 @@ import java.util.Optional;
 
 
 public class UserDAO {
-    private final String baseSelect = "SELECT * " +
-           "FROM users ";
+    private final String baseSelect = "SELECT au.user_id, au.username, au.email, au.password, au.given_name, au.surname, au.is_active, au.role_id " +
+            "FROM users au "+
+            "JOIN user_roles ur "+
+            "ON au.role_id = ur.role_id ";
 
     public List<User> getAllUsers() {
 
@@ -48,6 +50,7 @@ public class UserDAO {
             user.setGivenName(rs.getString("given_name"));
             user.setSurname(rs.getString("surname"));
             user.setActive(rs.getBoolean("is_active"));
+            user.setRole(rs.getString("role_id"));
             users.add(user);
         }
         return users;

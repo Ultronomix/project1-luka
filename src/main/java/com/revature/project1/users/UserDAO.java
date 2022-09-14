@@ -3,7 +3,12 @@ package com.revature.project1.users;
 import com.revature.project1.common.exceptions.DataSourceException;
 import com.revature.project1.users.datasource.ConnectionFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +72,45 @@ public class UserDAO {
         }
 
     }
+    public String save(User user) {
 
+        String sql = "INSERT INTO users (given_name, surname, email, username, password, role_id) " +
+                "VALUES (?, ?, ?, ?, ?, '5a2e0415-ee08-440f-ab8a-778b37ff6873')";
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sql, new String[] {"id"});
+            pstmt.setString(1, user.getGivenName());
+            pstmt.setString(2, user.getSurname());
+            pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getUsername());
+            pstmt.setString(5, user.getPassword());
+
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            rs.next();
+            user.setUserId(rs.getString("user_id"));
+
+        } catch (SQLException e) {
+            log("ERROR", e.getMessage());
+        }
+
+        log("INFO", "Successfully persisted new used with id: " + user.getUserId());
+
+        return user.getUserId();
+
+    }
+    public void log(String level, String message) {
+        try {
+            File logFile = new File("logs/app.log");
+            logFile.createNewFile();
+            BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile));
+            logWriter.write(String.format("[%s] at %s logged: [%s] %s\n", Thread.currentThread().getName(), LocalDate.now(), level.toUpperCase(), message));
+            logWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

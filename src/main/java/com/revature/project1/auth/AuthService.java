@@ -1,13 +1,12 @@
 package com.revature.project1.auth;
 
 import com.revature.project1.common.exceptions.AuthenticationException;
+import com.revature.project1.common.exceptions.InvalidRequestException;
 import com.revature.project1.users.User;
 import com.revature.project1.users.UserDAO;
-
-import java.util.List;
+import com.revature.project1.users.UserResponse;
 
 public class AuthService {
-
 
     private final UserDAO userDAO;
 
@@ -15,11 +14,23 @@ public class AuthService {
         this.userDAO = userDAO;
     }
 
-    public User authenticate(Credentials credentials) {
+    public UserResponse authenticate(Credentials credentials) {
 
-        if (credentials == null || credentials.getUsername().length() < 4 || credentials.getPassword().length() < 8) {
-            throw new RuntimeException("Invalid request data provided!");
+        if (credentials == null) {
+            throw new InvalidRequestException("The provided credentials object was found to be null.");
         }
-        return userDAO.findUserByUsernameAndPassword(credentials.getUsername(), credentials.getPassword()).orElseThrow(AuthenticationException::new);
+
+        if (credentials.getUsername().length() < 4) {
+            throw new InvalidRequestException("The provided username was not the correct length (must be at least 4 characters).");
+        }
+
+        if (credentials.getPassword().length() < 8) {
+            throw new InvalidRequestException("The provided password was not the correct length (must be at least 8 characters).");
+        }
+
+        return userDAO.findUserByUsernameAndPassword(credentials.getUsername(), credentials.getPassword())
+                .map(UserResponse::new)
+                .orElseThrow(AuthenticationException::new);
+
     }
 }

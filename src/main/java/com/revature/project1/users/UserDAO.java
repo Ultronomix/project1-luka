@@ -39,6 +39,30 @@ public class UserDAO {
         return allUsers;
     }
 
+    public  String newUser(User user){
+        String sql = "INSERT INTO users (username, email, password, given_name, surname, is_active, role_id) " +
+                "VALUES(?,?,?,?,?,?,true,'0001')";
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"id"});
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getPassword());
+            pstmt.setString(4, user.getGivenName());
+            pstmt.setString(5, user.getSurname());
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            rs.next();
+            user.setUserId(rs.getNString("user_id"));
+
+        } catch (SQLException e){
+            log("ERROR",e.getMessage());
+        }
+        log("INFO","Successfully added user: " + user.getUserId());
+        return user.getUserId();
+
+    }
+
     private List<User> mapResultSet(ResultSet rs) throws SQLException {
         List<User> users = new ArrayList<>();
         while (rs.next()) {
@@ -58,7 +82,7 @@ public class UserDAO {
 
     public Optional<User> findUserByUsernameAndPassword(String username, String password) {
 
-        String sql = baseSelect + "WHERE au.username = ? AND au.password = ?";
+        String sql = baseSelect + "WHERE users.username = ? AND users.password = ?";
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
@@ -75,35 +99,7 @@ public class UserDAO {
         }
 
     }
-    public String save(User user) {
 
-        String sql = "INSERT INTO users (given_name, surname, email, username, password, role_id) " +
-                "VALUES (?, ?, ?, ?, ?, '5a2e0415-ee08-440f-ab8a-778b37ff6873')";
-
-        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-
-            PreparedStatement pstmt = conn.prepareStatement(sql, new String[] {"id"});
-            pstmt.setString(1, user.getGivenName());
-            pstmt.setString(2, user.getSurname());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getUsername());
-            pstmt.setString(5, user.getPassword());
-
-            pstmt.executeUpdate();
-
-            ResultSet rs = pstmt.getGeneratedKeys();
-            rs.next();
-            user.setUserId(rs.getString("user_id"));
-
-        } catch (SQLException e) {
-            log("ERROR", e.getMessage());
-        }
-
-        log("INFO", "Successfully persisted new used with id: " + user.getUserId());
-
-        return user.getUserId();
-
-    }
     public void log(String level, String message) {
         try {
             File logFile = new File("logs/app.log");

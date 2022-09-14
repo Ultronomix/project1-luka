@@ -1,5 +1,8 @@
 package com.revature.project1;
 
+import com.revature.project1.auth.AuthServlet;
+import com.revature.project1.users.User;
+import com.revature.project1.users.UserDAO;
 import com.revature.project1.users.UserServlet;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
@@ -8,16 +11,22 @@ public class Project1 {
     public static void main(String[] args) throws LifecycleException {
         String docBase = System.getProperty(("java.io.tmpdir"));
         Tomcat webServer = new Tomcat();
+
         webServer.setBaseDir(docBase);
         webServer.setPort(8080);
         webServer.getConnector();
 
-        webServer.addContext("", docBase);
-        webServer.addServlet("", "UserServlet", new UserServlet()).addMapping("/users");
+        UserDAO userDAO = new UserDAO();
+        UserServlet userServlet = new UserServlet(userDAO);
+        AuthServlet authServlet = new AuthServlet(userDAO);
+
+        final String rootContext = "/project1";
+        webServer.addContext(rootContext, docBase);
+        webServer.addServlet(rootContext, "UserServlet", userServlet).addMapping("/users");
+        webServer.addServlet(rootContext, "AuthServlet", userServlet).addMapping("/auth");
 
 
         webServer.start();
         webServer.getServer().await();
-        System.out.println("Web application successfully started.");
     }
 }

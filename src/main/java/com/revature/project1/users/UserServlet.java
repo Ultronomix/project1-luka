@@ -10,7 +10,11 @@ import java.util.List;
 
 public class UserServlet extends HttpServlet {
 
-    private UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO;
+
+    public UserServlet(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

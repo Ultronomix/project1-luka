@@ -10,10 +10,8 @@ import java.util.Optional;
 
 
 public class UserDAO {
-    private final String baseSelect = "SELECT au.id, au.given_name, au.surname, au.email, au.username, au.role_id, ur.role " +
-            "FROM app_users au " +
-            "JOIN user_roles ur " +
-            "ON au.role_id = ur.id ";
+    private final String baseSelect = "SELECT * " +
+           "FROM users ";
 
     public List<User> getAllUsers() {
 
@@ -41,7 +39,7 @@ public class UserDAO {
             user.setUserId(rs.getString("user_id"));
             user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
-            user.setPassword(rs.getString("password"));
+            user.setPassword("password");
             user.setGivenName(rs.getString("given_name"));
             user.setSurname(rs.getString("surname"));
             user.setActive(rs.getBoolean("is_active"));

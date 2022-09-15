@@ -3,14 +3,14 @@ package com.revature.project1.reimbursements;
 
 
 import com.revature.project1.common.datasource.ConnectionFactory;
+import com.revature.project1.common.exceptions.DataSourceException;
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class ReimbDAO {
 
@@ -35,6 +35,19 @@ public class ReimbDAO {
         }
         return allReimbursementsList;
 
+    }
+
+    public Optional<Reimbursement> getReimbursementById(String reimb_id) {
+        String sql = baseSelect + "WHERE re.reimb_id = ?";
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setObject(1, reimb_id);
+            ResultSet rs = pstmt.executeQuery();
+            return mapResultSet(rs).stream().findFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
     }
 
     private List<Reimbursement> mapResultSet(ResultSet rs) throws SQLException {

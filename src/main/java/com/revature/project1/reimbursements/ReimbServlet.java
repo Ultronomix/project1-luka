@@ -22,7 +22,6 @@ public class ReimbServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
 
-        resp.getWriter().write("DoGet works on Reimb Servlet");
 
 
     }

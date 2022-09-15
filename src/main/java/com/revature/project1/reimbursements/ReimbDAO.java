@@ -15,9 +15,7 @@ import java.util.List;
 public class ReimbDAO {
 
     private final String baseSelect = "SELECT re.reimb_id, re.amount, re.submitted, re.resolved, re.description, re.author_id, re.resolver_id, re.status_id, re.type_id " +
-            "FROM reimbursements re " +
-            "JOIN user_roles ur "+
-            " ON au.role_id = ur.role_id ";
+            "FROM reimbursements re ";
 
     public List<Reimbursement> getAllReimbursements() {
 

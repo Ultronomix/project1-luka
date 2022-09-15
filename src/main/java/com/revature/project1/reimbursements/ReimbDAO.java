@@ -14,12 +14,14 @@ import java.util.List;
 
 public class ReimbDAO {
 
-    private final String baseSelect = "SELECT * " +
-            "FROM reimbursements ";
+    private final String baseSelect = "SELECT re.reimb_id, re.amount, re.submitted, re.resolved, re.description, re.author_id, re.resolver_id, re.status_id, re.type_id " +
+            "FROM reimbursements re " +
+            "JOIN user_roles ur "+
+            " ON au.role_id = ur.role_id ";
 
-    public List<Reimbursements> getAllReimbursements() {
+    public List<Reimbursement> getAllReimbursements() {
 
-        List<Reimbursements> allReimbursementsList = new ArrayList<>();
+        List<Reimbursement> allReimbursementsList = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
@@ -37,14 +39,20 @@ public class ReimbDAO {
 
     }
 
-    private List<Reimbursements> mapResultSet(ResultSet rs) throws SQLException {
-        List<Reimbursements> reimbursementsList = new ArrayList<>();
+    private List<Reimbursement> mapResultSet(ResultSet rs) throws SQLException {
+        List<Reimbursement> reimbursementsList = new ArrayList<>();
         while (rs.next()) {
-            Reimbursements reimbursements = new Reimbursements();
+            Reimbursement reimbursements = new Reimbursement();
             reimbursements.setReimbId(rs.getString("reimb_id"));
             reimbursements.setAmount(rs.getDouble("amount"));
+            reimbursements.setSubmitted(rs.getString("submitted"));
+            reimbursements.setResolved(rs.getString("resolved"));
             reimbursements.setDescription(rs.getString("description"));
-            reimbursements.setPaymentId(rs.getByte("payment_id"));
+            reimbursements.setAuthorId(rs.getString("author_id"));
+            reimbursements.setResolverId(rs.getString("resolver_id"));
+            reimbursements.setStatusId(rs.getString("status_id"));
+            reimbursements.setTypeId(rs.getString("type_id"));
+
 
             reimbursementsList.add(reimbursements);
         }

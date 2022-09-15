@@ -3,6 +3,7 @@ package com.revature.project1.users;
 import com.revature.project1.common.exceptions.DataSourceException;
 import com.revature.project1.common.datasource.ConnectionFactory;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -103,7 +104,7 @@ public class UserDAO {
 
     public  String newUsername(User user){
         String sql = "INSERT INTO users (username, email, password, given_name, surname, is_active, role_id) " +
-                "VALUES(?,?,?,?,?,?,true,'0001')";
+                "VALUES(?,?,?,?,?,true,'0001')";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"id"});
             pstmt.setString(1, user.getUsername());

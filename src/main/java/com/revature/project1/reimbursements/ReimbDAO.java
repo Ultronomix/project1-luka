@@ -37,11 +37,11 @@ public class ReimbDAO {
 
     }
 
-    public Optional<Reimbursement> getReimbursementById(String reimb_id) {
+    public Optional<Reimbursement> getReimbursementById(String reimbId) {
         String sql = baseSelect + "WHERE re.reimb_id = ?";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setObject(1, reimb_id);
+            pstmt.setObject(1, reimbId);
             ResultSet rs = pstmt.executeQuery();
             return mapResultSet(rs).stream().findFirst();
         } catch (SQLException e) {

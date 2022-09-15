@@ -14,16 +14,16 @@ public class ReimbResponse implements Serializable {
     private String statusId;
     private String typeId;
 
-    public ReimbResponse(String reimbId, Double amount, String submitted, String resolved, String description, String authorId, String resolverId, String statusId, String typeId) {
-        this.reimbId = reimbId;
-        this.amount = amount;
-        this.submitted = submitted;
-        this.resolved = resolved;
-        this.description = description;
-        this.authorId = authorId;
-        this.resolverId = resolverId;
-        this.statusId = statusId;
-        this.typeId = typeId;
+    public ReimbResponse(Reimbursement reimb) {
+        this.reimbId = reimb.getReimbId();
+        this.amount = reimb.getAmount();
+        this.submitted = reimb.getSubmitted();
+        this.resolved = reimb.getResolved();
+        this.description = reimb.getDescription();
+        this.authorId = reimb.getAuthorId();
+        this.resolverId = reimb.getResolverId();
+        this.statusId = reimb.getStatusId();
+        this.typeId = reimb.getTypeId();
     }
 
     public String getReimbId() {

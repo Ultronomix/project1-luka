@@ -9,6 +9,8 @@ import com.revature.project1.common.exceptions.ResourceNotFoundException;
 import com.revature.project1.users.UserDAO;
 import com.revature.project1.reimbursements.ReimbDAO;
 import com.revature.project1.users.UserResponse;
+import com.revature.project1.reimbursements.ReimbResponse;
+import com.revature.project1.reimbursements.ReimbService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,10 +22,10 @@ import java.util.List;
 
 public class ReimbServlet extends HttpServlet {
 
-    private final ReimbDAO reimbDAO;
+    private final ReimbService reimbService;
 
-    public ReimbServlet(ReimbDAO reimbDAO) {
-        this.reimbDAO = reimbDAO;
+    public ReimbServlet(ReimbService reimbService) {
+        this.reimbService = reimbService;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ReimbServlet extends HttpServlet {
             return;
         }
 
-        String idParam = req.getParameter("user_id");
+        String idParam = req.getParameter("reimbId");
 
         UserResponse requester = (UserResponse) userSession.getAttribute("authUser");
         if (!requester.getRoleId().equals("0001") && !requester.getRoleId().equals("0002")) {
@@ -49,8 +51,11 @@ public class ReimbServlet extends HttpServlet {
 
         try {
             if (idParam == null) {
-                List<Reimbursement> allUsers = reimbDAO.getAllReimbursements();
+                List<ReimbResponse> allUsers = reimbService.getAllReimbursements();
                 resp.getWriter().write(jsonMapper.writeValueAsString(allUsers));
+            } else {
+                ReimbResponse reimbById = reimbService.getReimbById(idParam);
+                resp.getWriter().write(jsonMapper.writeValueAsString(reimbById));
             }
 
         } catch (InvalidRequestException | JsonMappingException e) {

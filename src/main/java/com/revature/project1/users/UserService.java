@@ -24,14 +24,10 @@ public class UserService {
     }
 
     public UserResponse getUserById(String id) {
-
         if (id == null || id.length() <= 0) {
             throw new InvalidRequestException("ID cannot be empty!");
         }
-
         try {
-
-
             return userDAO.findUserById(id)
                     .map(UserResponse::new)
                     .orElseThrow(ResourceNotFoundException::new);
@@ -39,9 +35,6 @@ public class UserService {
         } catch (IllegalArgumentException e) {
             throw new InvalidRequestException("An invalid id string was provided.");
         }
-
-
-
     }
 
     public ResourceCreationResponse register(NewUserRequest newUser) {

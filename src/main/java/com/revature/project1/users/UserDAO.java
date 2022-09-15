@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 public class UserDAO {
@@ -39,7 +40,69 @@ public class UserDAO {
         return allUsers;
     }
 
-    public  String newUser(User user){
+    public Optional<User> findUserById (String userId){
+        String sql = baseSelect + "WHERE au.user_id = ?";
+        try(Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setObject(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            return mapResultSet(rs).stream().findFirst();
+        } catch (SQLException e){
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
+    }
+
+    public Optional<User> findUserByUsername (String username){
+        String sql = baseSelect + "WHERE au.username = ?";
+        try(Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            return mapResultSet(rs).stream().findFirst();
+        }catch (SQLException e){
+            throw new DataSourceException(e);
+        }
+
+    }
+    public Optional<User> findUserByEmail(String email){
+        String sql = baseSelect + "WHERE au.email = ?";
+
+        try(Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            return mapResultSet(rs).stream().findFirst();
+        }catch (SQLException e){
+            throw new DataSourceException(e);
+        }
+
+    }
+
+    public Optional<User> findUserByUsernameAndPassword(String username,String password){
+        String sql = baseSelect + "WHERE au.username = ? AND au.password = ?";
+        try(Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,password);
+            //System.out.println(username,password);
+            ResultSet rs = pstmt.executeQuery();
+            return mapResultSet(rs).stream().findFirst();
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new DataSourceException(e);
+
+        }
+
+    }
+    public boolean isUsernameTaken(String username){
+        return findUserByUsername(username).isPresent();
+    }
+    public boolean isEmailTaken(String email){
+        return findUserByEmail(email).isPresent();
+    }
+
+    public  String newUsername(User user){
         String sql = "INSERT INTO users (username, email, password, given_name, surname, is_active, role_id) " +
                 "VALUES(?,?,?,?,?,?,true,'0001')";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
@@ -80,25 +143,6 @@ public class UserDAO {
         return users;
     }
 
-    public Optional<User> findUserByUsernameAndPassword(String username, String password) {
-
-        String sql = baseSelect + "WHERE users.username = ? AND users.password = ?";
-
-        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-
-            // JDBC Statement objects are vulnerable to SQL injection
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-            return mapResultSet(rs).stream().findFirst();
-
-        } catch (SQLException e) {
-            // TODO log this exception
-            throw new DataSourceException(e);
-        }
-
-    }
 
     public void log(String level, String message) {
         try {

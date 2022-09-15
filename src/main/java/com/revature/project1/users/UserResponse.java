@@ -11,7 +11,7 @@ public class UserResponse implements Serializable {
     private String surname;
     private String email;
     private String username;
-    private String role;
+    private String roleId;
 
     public UserResponse(User subject) {
         this.userId = subject.getUserId();
@@ -19,15 +19,15 @@ public class UserResponse implements Serializable {
         this.surname = subject.getSurname();
         this.email = subject.getEmail();
         this.username = subject.getUsername();
-        this.role = subject.getRole();
+        this.roleId = subject.getRole();
     }
 
     public String getId() {
         return userId;
     }
 
-    public void setId(String id) {
-        this.userId = id;
+    public void setId(String userId) {
+        this.userId = userId;
     }
 
     public String getGivenName() {
@@ -62,12 +62,12 @@ public class UserResponse implements Serializable {
         this.username = username;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleId() {
+        return roleId;
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.roleId = roleId;
     }
 
     @Override
@@ -75,12 +75,12 @@ public class UserResponse implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserResponse that = (UserResponse) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(givenName, that.givenName) && Objects.equals(surname, that.surname) && Objects.equals(email, that.email) && Objects.equals(username, that.username) && Objects.equals(role, that.role);
+        return Objects.equals(userId, that.userId) && Objects.equals(givenName, that.givenName) && Objects.equals(surname, that.surname) && Objects.equals(email, that.email) && Objects.equals(username, that.username) && Objects.equals(roleId, that.roleId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, givenName, surname, email, username, role);
+        return Objects.hash(userId, givenName, surname, email, username, roleId);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class UserResponse implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", role='" + role + '\'' +
+                ", roleId='" + roleId + '\'' +
                 '}';
     }
 

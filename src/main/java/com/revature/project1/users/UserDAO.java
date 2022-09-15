@@ -1,7 +1,7 @@
 package com.revature.project1.users;
 
 import com.revature.project1.common.exceptions.DataSourceException;
-import com.revature.project1.users.datasource.ConnectionFactory;
+import com.revature.project1.common.datasource.ConnectionFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 
 public class UserDAO {

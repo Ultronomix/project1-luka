@@ -1,4 +1,4 @@
-package com.revature.project1.users.datasource;
+package com.revature.project1.common.datasource;
 
 import java.io.IOException;
 import java.sql.Connection;

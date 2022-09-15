@@ -1,7 +1,6 @@
 package com.revature.project1.reimbursements;
 
-import com.revature.project1.users.User;
-import com.revature.project1.users.datasource.ConnectionFactory;
+import com.revature.project1.common.datasource.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

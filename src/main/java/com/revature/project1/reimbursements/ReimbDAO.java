@@ -4,6 +4,7 @@ package com.revature.project1.reimbursements;
 
 import com.revature.project1.common.datasource.ConnectionFactory;
 import com.revature.project1.common.exceptions.DataSourceException;
+import com.revature.project1.users.User;
 
 
 import java.sql.*;
@@ -48,6 +49,33 @@ public class ReimbDAO {
             e.printStackTrace();
             throw new DataSourceException(e);
         }
+    }
+
+    public  String newReimbursement(Reimbursement reimbursement){
+        String sql = "INSERT INTO reimbursements (re.reimb_id, re.amount, re.submitted, re.resolved, re.description, re.author_id, re.resolver_id, re.status_id, re.type_id) " +
+                "VALUES(?,?,?,?,?,?,?,?,?)";
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, UUID.randomUUID().toString());
+            pstmt.setDouble(2, reimbursement.getAmount());
+            pstmt.setString(3, reimbursement.getSubmitted());
+            pstmt.setString(4, reimbursement.getResolved());
+            pstmt.setString(5, reimbursement.getDescription());
+            pstmt.setString(6, reimbursement.getAuthorId());
+            pstmt.setString(7, reimbursement.getResolverId());
+            pstmt.setString(8, reimbursement.getStatusId());
+            pstmt.setString(9, reimbursement.getTypeId());
+            pstmt.executeUpdate();
+
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            throw new DataSourceException(e);
+
+        }
+
+        return reimbursement.getReimbId();
+
     }
 
     private List<Reimbursement> mapResultSet(ResultSet rs) throws SQLException {

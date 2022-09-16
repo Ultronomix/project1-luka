@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 public class UserDAO {
@@ -103,25 +104,25 @@ public class UserDAO {
     }
 
     public  String newUsername(User user){
-        String sql = "INSERT INTO users (username, email, password, given_name, surname, is_active, role_id) " +
-                "VALUES(?,?,?,?,?,true,'0001')";
+        String sql = "INSERT INTO users (user_id, username, email, password, given_name, surname, is_active, role_id) " +
+                "VALUES(?,?,?,?,?,?,true,'0001')";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
-            PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"id"});
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getEmail());
-            pstmt.setString(3, user.getPassword());
-            pstmt.setString(4, user.getGivenName());
-            pstmt.setString(5, user.getSurname());
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, UUID.randomUUID().toString());
+            pstmt.setString(2, user.getUsername());
+            pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getPassword());
+            pstmt.setString(5, user.getGivenName());
+            pstmt.setString(6, user.getSurname());
             pstmt.executeUpdate();
 
-            ResultSet rs = pstmt.getGeneratedKeys();
-            rs.next();
-            user.setUserId(rs.getNString("user_id"));
 
         } catch (SQLException e){
-            log("ERROR",e.getMessage());
+            e.printStackTrace();
+            throw new DataSourceException(e);
+
         }
-        log("INFO","Successfully added user: " + user.getUserId());
+
         return user.getUserId();
 
     }
@@ -144,16 +145,6 @@ public class UserDAO {
     }
 
 
-    public void log(String level, String message) {
-        try {
-            File logFile = new File("logs/app.log");
-            logFile.createNewFile();
-            BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile));
-            logWriter.write(String.format("[%s] at %s logged: [%s] %s\n", Thread.currentThread().getName(), LocalDate.now(), level.toUpperCase(), message));
-            logWriter.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 }

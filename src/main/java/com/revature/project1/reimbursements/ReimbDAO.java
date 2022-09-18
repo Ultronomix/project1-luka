@@ -5,6 +5,7 @@ package com.revature.project1.reimbursements;
 import com.revature.project1.common.datasource.ConnectionFactory;
 import com.revature.project1.common.exceptions.DataSourceException;
 import com.revature.project1.users.User;
+import java.sql.Timestamp;
 
 
 import java.sql.*;
@@ -15,8 +16,8 @@ import java.util.UUID;
 
 public class ReimbDAO {
 
-    private final String baseSelect = "SELECT re.reimb_id, re.amount, re.submitted, re.resolved, re.description, re.author_id, re.resolver_id, re.status_id, re.type_id " +
-            "FROM reimbursements re ";
+    private final String baseSelect = "SELECT reimbursements.reimb_id, reimbursements.amount, reimbursements.submitted, reimbursements.resolved, reimbursements.description, reimbursements.author_id, reimbursements.resolver_id, reimbursements.status_id, reimbursements.type_id " +
+            "FROM reimbursements ";
 
     public List<Reimbursement> getAllReimbursements() {
 
@@ -52,28 +53,25 @@ public class ReimbDAO {
     }
 
     public  String newReimbursement(Reimbursement reimbursement){
-        String sql = "INSERT INTO reimbursements (re.reimb_id, re.amount, re.submitted, re.resolved, re.description, re.author_id, re.resolver_id, re.status_id, re.type_id) " +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO reimbursements (reimb_id, amount, submitted, resolved, description, author_id, resolver_id, status_id, type_id) " +
+                "VALUES(?,?,?,null,?,?,?,?,?)";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, UUID.randomUUID().toString());
             pstmt.setDouble(2, reimbursement.getAmount());
-            pstmt.setString(3, reimbursement.getSubmitted());
-            pstmt.setString(4, reimbursement.getResolved());
-            pstmt.setString(5, reimbursement.getDescription());
-            pstmt.setString(6, reimbursement.getAuthorId());
-            pstmt.setString(7, reimbursement.getResolverId());
-            pstmt.setString(8, reimbursement.getStatusId());
-            pstmt.setString(9, reimbursement.getTypeId());
+            pstmt.setTimestamp(3, timestamp);
+            pstmt.setString(4, reimbursement.getDescription());
+            pstmt.setString(5, reimbursement.getAuthorId());
+            pstmt.setString(6, reimbursement.getResolverId());
+            pstmt.setString(7, reimbursement.getStatusId());
+            pstmt.setString(8, reimbursement.getTypeId());
             pstmt.executeUpdate();
-
 
         } catch (SQLException e){
             e.printStackTrace();
             throw new DataSourceException(e);
-
         }
-
         return reimbursement.getReimbId();
 
     }

@@ -7,3 +7,5 @@ resources/
 *.jar
 
 application.properties
+
+Readme.md

@@ -46,7 +46,7 @@ public class ReimbServlet extends HttpServlet {
         String idParam = req.getParameter("reimbId");
 
         UserResponse requester = (UserResponse) userSession.getAttribute("authUser");
-        if (!requester.getRoleId().equals("0001") && !requester.getRoleId().equals("0002")) {
+        if (!requester.getRoleId().equals("0003") && !requester.getRoleId().equals("0002")) {
             resp.setStatus(403);
             resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "Requester is not permitted to communicate with this endpoint")));
             return;

@@ -40,7 +40,7 @@ public class ReimbDAO {
     }
 
     public Optional<Reimbursement> getReimbursementById(String reimbId) {
-        String sql = baseSelect + "WHERE re.reimb_id = ?";
+        String sql = baseSelect + "WHERE reimbursements.reimb_id = ?";
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setObject(1, reimbId);

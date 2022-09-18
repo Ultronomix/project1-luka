@@ -76,6 +76,20 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper jsonMapper = new ObjectMapper();
         resp.setContentType("application/json");
+
+        HttpSession userSession = req.getSession(false);
+        if (userSession == null) {
+            resp.setStatus(401);
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Requester not authenticated, please log in")));
+            return;
+        }
+
+        UserResponse requester = (UserResponse) userSession.getAttribute("authUser");
+        if (!requester.getRoleId().equals("0001")) {
+            resp.setStatus(403);
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "Requester is not permitted to communicate with this endpoint")));
+            return;
+        }
         try {
 
             NewUserRequest requestBody = jsonMapper.readValue(req.getInputStream(), NewUserRequest.class);

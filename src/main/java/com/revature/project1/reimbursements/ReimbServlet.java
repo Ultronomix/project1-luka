@@ -80,19 +80,17 @@ public class ReimbServlet extends HttpServlet {
         protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             ObjectMapper jsonMapper = new ObjectMapper();
             resp.setContentType("application/json");
+
             HttpSession reimbSession = req.getSession(false);
 
             if (reimbSession == null) {
-
                 resp.setStatus(401);
-                resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Requestor not authenticated with server, log in")));
+                resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Requester is not authenticated with the system, please log in.")));
                 return;
             }
+            UserResponse requester = (UserResponse) reimbSession.getAttribute("authUser");
 
-            UserResponse requester1 = (UserResponse) reimbSession.getAttribute("authUser");
-
-            if (!requester1.getRoleId().equals("0003")) {
-
+            if (!requester.getRoleId().equals("0003") && !requester.getRoleId().equals("0002")) {
                 resp.setStatus(403);
                 resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "Requester is not permitted to communicate with this endpoint.")));
                 return;
@@ -100,7 +98,7 @@ public class ReimbServlet extends HttpServlet {
 
             try {
                 NewReimbRequest requestBody = jsonMapper.readValue(req.getInputStream(), NewReimbRequest.class);
-                requestBody.setAuthorId(requester1.getId());
+                requestBody.setAuthorId(requester.getId());
                 ResourceCreationResponse responseBody = reimbService.newReimb(requestBody);
                 resp.getWriter().write(jsonMapper.writeValueAsString(responseBody));
 

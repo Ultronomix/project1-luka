@@ -25,7 +25,6 @@ public class ReimbDAO {
 
         } catch (SQLException e) {
             System.err.println("Something went wrong when communicating with the database!");
-            e.printStackTrace();
         }
         return allReimbursementsList;
     }
@@ -67,7 +66,6 @@ public class ReimbDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e){
-            e.printStackTrace();
             throw new DataSourceException(e);
         }
         return reimbursement.getReimbId();
@@ -92,7 +90,6 @@ public class ReimbDAO {
 
         } catch (SQLException e) {
             throw new DataSourceException(e);
-
         } return "Updated";
     }
 

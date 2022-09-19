@@ -34,7 +34,7 @@ public class UserServlet extends HttpServlet {
         HttpSession userSession = req.getSession(false);
         if (userSession == null) {
             resp.setStatus(401);
-            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Requester not authenticated, please log in")));
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Not authenticated with the system, please log in.")));
             return;
         }
 
@@ -43,7 +43,7 @@ public class UserServlet extends HttpServlet {
         UserResponse requester = (UserResponse) userSession.getAttribute("authUser");
         if (!requester.getRoleId().equals("0001")) {
             resp.setStatus(403);
-            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "Requester is not permitted to communicate with this endpoint")));
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "You do not have permission to communicate with this endpoint.")));
             return;
         }
 
@@ -80,14 +80,14 @@ public class UserServlet extends HttpServlet {
         HttpSession userSession = req.getSession(false);
         if (userSession == null) {
             resp.setStatus(401);
-            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Requester not authenticated, please log in")));
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(401, "Not authenticated with the system, please log in.")));
             return;
         }
 
         UserResponse requester = (UserResponse) userSession.getAttribute("authUser");
         if (!requester.getRoleId().equals("0001")) {
             resp.setStatus(403);
-            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "Requester is not permitted to communicate with this endpoint")));
+            resp.getWriter().write(jsonMapper.writeValueAsString(new ErrorResponse(403, "You do not have permission to communicate with this endpoint.")));
             return;
         }
         try {

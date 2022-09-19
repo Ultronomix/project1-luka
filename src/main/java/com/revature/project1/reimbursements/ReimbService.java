@@ -65,4 +65,13 @@ public class ReimbService {
         String newReimbId = reimbDAO.newReimbursement(reimbToPersist);
         return new ResourceCreationResponse(newReimbId);
     }
+
+    public void updateStatus (UpdateReimbRequest updateReimbRequest) {
+
+        String status = updateReimbRequest.extractEntity().getStatusId();
+        String reimbId = updateReimbRequest.extractEntity().getReimbId();
+        String resolverId = updateReimbRequest.extractEntity().getResolverId();
+
+        reimbDAO.updateStatus(status, reimbId, resolverId);
+    }
 }

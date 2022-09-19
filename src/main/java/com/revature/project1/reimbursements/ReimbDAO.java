@@ -76,24 +76,25 @@ public class ReimbDAO {
 
     }
 
-    private String updateReimbursement(Reimbursement reimb ) {
+    public String updateStatus(String status ,String reimbId,String resolverId) {
         // StatusId, resolverId, resolved (Send out timestamp), ,
-        String sql = "update reimbursements" +
+        String sql = "update reimbursements " +
                 "set resolved = ?, status_id = ?, resolver_id = ? " +
                 "where reimb_id = ? ";
+
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setTimestamp(1,  timestamp);
-            pstmt.setString(2, reimb.getStatusId());
-            pstmt.setString(3, reimb.getResolverId());
+            pstmt.setTimestamp(1, timestamp);
+            pstmt.setString(2, status);
+            pstmt.setString(3, resolverId);
+            pstmt.setString(4, reimbId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataSourceException(e);
-        }
-        return reimb.getReimbId();
+        } return "Updated";
     }
 
     private List<Reimbursement> mapResultSet(ResultSet rs) throws SQLException {
@@ -115,4 +116,6 @@ public class ReimbDAO {
         }
         return reimbursementsList;
     }
+
+
 }

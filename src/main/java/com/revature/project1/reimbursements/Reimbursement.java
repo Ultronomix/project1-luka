@@ -3,7 +3,6 @@ package com.revature.project1.reimbursements;
 import java.util.Objects;
 
 public class Reimbursement {
-
     private String reimbId;
     private Double amount;
     private String submitted;
@@ -17,7 +16,6 @@ public class Reimbursement {
     public Reimbursement() {
         super();
     }
-
     public Reimbursement(String reimbId, Double amount, String submitted, String resolved, String description, String authorId, String resolverId, String statusId, String typeId) {
         this.reimbId = reimbId;
         this.amount = amount;

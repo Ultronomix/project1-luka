@@ -2,8 +2,13 @@ package com.revature.project1.users;
 
 import com.revature.project1.common.exceptions.DataSourceException;
 import com.revature.project1.common.datasource.ConnectionFactory;
+import java.io.File;
+import java.io.FileWriter;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +36,7 @@ public class UserDAO {
             System.err.println("Something went wrong when communicating with the database");
             e.getMessage();
         }
+        log("INFO", "Successfully found all users: ");
         return allUsers;
     }
 
@@ -44,6 +50,7 @@ public class UserDAO {
 
             ResultSet rs = pstmt.executeQuery();
 
+            log("INFO", "Successfully persisted new user with id: " + userId);
             return mapResultSet(rs).stream().findFirst();
         } catch (SQLException e){
             throw new DataSourceException(e);
@@ -59,7 +66,7 @@ public class UserDAO {
             pstmt.setString(1, username);
 
             ResultSet rs = pstmt.executeQuery();
-
+            log("INFO", "Successfully found user with username: " + username);
             return mapResultSet(rs).stream().findFirst();
         }catch (SQLException e){
             throw new DataSourceException(e);
@@ -75,6 +82,7 @@ public class UserDAO {
 
             ResultSet rs = pstmt.executeQuery();
 
+            log("INFO", "Successfully found user by email: " + email);
             return mapResultSet(rs).stream().findFirst();
         }catch (SQLException e){
             throw new DataSourceException(e);
@@ -91,6 +99,7 @@ public class UserDAO {
             pstmt.setString(2,password);
 
             ResultSet rs = pstmt.executeQuery();
+            log("INFO", "Successfully found user with username and password. " );
             return mapResultSet(rs).stream().findFirst();
         }catch (SQLException e){
             throw new DataSourceException(e);
@@ -122,6 +131,7 @@ public class UserDAO {
         } catch (SQLException e){
             throw new DataSourceException(e);
         }
+        log("INFO", "Successfully persisted new user with id: " + user.getUserId());
         return user.getUserId();
     }
 
@@ -140,5 +150,17 @@ public class UserDAO {
             users.add(user);
         }
         return users;
+    }
+
+    public void log(String level, String message) {
+        try {
+            File logFile = new File("logs/app.log");
+            logFile.createNewFile();
+            BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile));
+            logWriter.write(String.format("[%s] at %s logged: [%s] %s\n", Thread.currentThread().getName(), LocalDate.now(), level.toUpperCase(), message));
+            logWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -100,7 +100,6 @@ public class NewReimbRequest implements Request<Reimbursement> {
                 ", typeId='" + typeId + '\'' +
                 '}';
     }
-
     @Override
     public Reimbursement extractEntity() {
         Reimbursement extractEntity = new Reimbursement();

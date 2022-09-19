@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-// Implements the Factory and Singleton design patterns
 public class ConnectionFactory {
 
     private static ConnectionFactory connFactory;
